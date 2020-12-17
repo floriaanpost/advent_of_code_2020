@@ -16,22 +16,19 @@ func main() {
 }
 
 func part(numbers []int, until int) int {
-	numcntr := make(map[int][]int)
+	numcntr := make([]int, until)
 	for ix, n := range numbers {
-		numcntr[n] = []int{ix + 1}
+		numcntr[n] = ix + 1
 	}
 	num := numbers[len(numbers)-1]
 	for ix := len(numbers) + 1; ix <= until; ix++ {
-		if len(numcntr[num]) <= 1 {
+		prev := numcntr[num]
+		numcntr[num] = ix - 1
+		if prev == 0 {
 			num = 0
-		} else {
-			num = numcntr[num][0] - numcntr[num][1]
+			continue
 		}
-		if len(numcntr[num]) > 0 {
-			numcntr[num] = []int{ix, numcntr[num][0]}
-		} else {
-			numcntr[num] = []int{ix}
-		}
+		num = ix - 1 - prev
 	}
 	return num
 }
