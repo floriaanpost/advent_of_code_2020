@@ -16,14 +16,14 @@ func main() {
 }
 
 func part(numbers []int, until int) int {
-	numcntr := make([]int, until)
+	lastseen := make([]int, until)
 	for ix, n := range numbers {
-		numcntr[n] = ix + 1
+		lastseen[n] = ix + 1
 	}
 	num := numbers[len(numbers)-1]
 	for ix := len(numbers) + 1; ix <= until; ix++ {
-		prev := numcntr[num]
-		numcntr[num] = ix - 1
+		prev := lastseen[num]
+		lastseen[num] = ix - 1
 		if prev == 0 {
 			num = 0
 			continue
