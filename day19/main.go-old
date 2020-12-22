@@ -1,0 +1,67 @@
+package main
+
+import (
+	"day19/lines"
+	"fmt"
+	"regexp"
+	"strings"
+	"time"
+)
+
+func main() {
+	lns := lines.MustParse("data_example", "\n\n")
+	start := time.Now()
+	fmt.Println(part1(lns))
+	stop := time.Now()
+	fmt.Println(stop.Sub(start))
+}
+
+func part1(blocks []string) int {
+	ruleRegex := buildRuleRegex(blocks[0])
+	dataLines := strings.Split(blocks[1], "\n")
+	count := 0
+	for _, line := range dataLines {
+		if ruleRegex.MatchString(line) {
+			count++
+		}
+	}
+	return count
+}
+
+var ruleNumExpr = regexp.MustCompile(`^[0-9]+`)
+var endRuleExpr = regexp.MustCompile(`[ab]`)
+
+func findRule(rulenum string, rules string) string {
+	rule := regexp.MustCompile("(\n|^)" + rulenum + ":.+(\n|$)")
+	return strings.TrimPrefix(strings.TrimSuffix(rule.FindString(rules), "\n"), "\n")
+}
+
+func parseRule(rulenum string, rules string) string {
+	r := findRule(rulenum, rules)
+	ruleparts := strings.Split(r, ": ")
+	rule := ruleparts[1]
+	end := endRuleExpr.FindString(rule)
+	if end != "" {
+		return end
+	}
+	orRules := strings.Split(rule, " | ")
+	regex := "("
+	for ix, orRule := range orRules {
+		ruleNums := strings.Split(orRule, " ")
+		for _, numstr := range ruleNums {
+			regex += parseRule(numstr, rules)
+		}
+		if ix != len(orRules)-1 {
+			regex += "|"
+		}
+	}
+	regex += ")"
+	return regex
+}
+
+func buildRuleRegex(ruleBlock string) *regexp.Regexp {
+	r := "^" + parseRule("0", ruleBlock) + "$"
+	fmt.Println(r)
+	regexrule := regexp.MustCompile(r)
+	return regexrule
+}

@@ -6,12 +6,16 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"time"
 )
 
 func main() {
 	lns := lines.MustParse("data", "\n")
+	start := time.Now()
 	fmt.Println(part1(lns))
 	fmt.Println(part2(lns))
+	stop := time.Now()
+	fmt.Println(stop.Sub(start))
 }
 
 func part1(lns []string) int64 {
