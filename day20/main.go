@@ -40,7 +40,7 @@ func part2(tls Tiles, monster []string) int {
 		mimg = append(mimg, r)
 	}
 	monsterCnt := image.findMonsters(mimg)
-	result := image.countActive() - monsterCnt*mimg.countActive()
+	result := image.pixelsActive() - monsterCnt*mimg.pixelsActive()
 	return result
 }
 
@@ -263,7 +263,7 @@ func (img Image) pxOffsets() [][]int {
 	return offsets
 }
 
-func (img Image) countActive() int {
+func (img Image) pixelsActive() int {
 	count := 0
 	for _, row := range img {
 		for _, v := range row {
