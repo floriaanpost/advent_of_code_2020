@@ -31,6 +31,7 @@ func part1(file string) int {
 
 func part2(file string) int {
 	blocks := lines.MustParse(file, "\n\n")
+	// found needed recursion level by tryal and error
 	ruleRegex := buildRuleRegex(blocks[0], 5)
 	dataLines := strings.Split(blocks[1], "\n")
 	count := 0
